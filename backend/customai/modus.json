@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schema.hypermode.com/modus.json",
+  "endpoints": {
+    "default": {
+      "type": "graphql",
+      "path": "/graphql",
+      "auth": "bearer-token"
+    }
+  },
+  "connections": {
+    "flaskapi": {
+      "type": "http",
+      "endpoint": "http://127.0.0.1:5000/extract-embedding"
+    },
+      "dgraph": {
+        "type": "http",
+        "endpoint": "https://blue-surf-1350024.us-east-1.aws.cloud.dgraph.io/graphql",
+        "headers": {
+          "Authorization": "Bearer {{API_KEY}}"
+        }
+      }
+  }
+}

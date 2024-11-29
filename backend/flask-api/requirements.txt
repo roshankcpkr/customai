@@ -1,0 +1,6 @@
+Flask
+tensorflow==2.7
+numpy
+pillow
+requests
+Keras-Applications
