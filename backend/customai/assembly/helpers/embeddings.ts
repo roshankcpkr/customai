@@ -11,7 +11,7 @@ class EmbeddingResponse {
 
 export function embeddingGenerate(imageUrl: string): EmbeddingResponse {
   console.log(imageUrl);
-  const url = `http://127.0.0.1:5000/extract-embedding`;
+  const url = `https://customai.onrender.com/extract-embedding`;
   const headers = http.Headers.from([["Content-Type", "application/json"]]);
 
   const payload = `{"image_url": "${imageUrl}"}`;
