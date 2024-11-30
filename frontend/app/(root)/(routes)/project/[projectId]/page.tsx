@@ -40,7 +40,7 @@ async function fetchProject(variables: ProjectVariables) {
   }
 }`;
 
-  const response = await fetch("http://localhost:8686/graphql", {
+  const response = await fetch(`${process.env.NEXT_PUBCLI_BACKEND_API}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
