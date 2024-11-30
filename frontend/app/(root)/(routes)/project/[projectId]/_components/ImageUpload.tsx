@@ -30,7 +30,7 @@ export const ImageUpload = ({ value, onChange }: ImageUploadProps) => {
         items-center justify-center"
     >
       <CldUploadButton
-        uploadPreset="customaiawdwadwad"
+        uploadPreset="weafawfwaTFGVG"
         options={{ maxFiles: 1 }}
         onSuccess={(result: any) => onChange(result.info.secure_url)}
       >
