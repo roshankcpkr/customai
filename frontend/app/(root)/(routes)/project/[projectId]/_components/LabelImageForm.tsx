@@ -107,29 +107,28 @@ const LabelImageForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
-    if (!userId) {
-      return;
-    }
-    try {
-      const fetchData = async () => {
-        const result = await fetchCreateImage({
-          imageUrl: values.imageUrl,
-          label: values.label.toLowerCase(),
-          projectId: projectId,
-          token: token,
-          owner: userId,
+    if (userId) {
+      try {
+        const fetchData = async () => {
+          const result = await fetchCreateImage({
+            imageUrl: values.imageUrl,
+            label: values.label.toLowerCase(),
+            projectId: projectId,
+            token: token,
+            owner: userId,
+          });
+          console.log("result", result);
+        };
+        fetchData();
+        form.reset();
+        toast.toast({
+          title: "Image uploaded",
+          description: "Image has been uploaded successfully",
         });
-        console.log("result", result);
-      };
-      fetchData();
-      form.reset();
-      toast.toast({
-        title: "Image uploaded",
-        description: "Image has been uploaded successfully",
-      });
-      router.push(`/project/${projectId}`);
-    } catch (error) {
-      console.error("Error:", error);
+        router.push(`/project/${projectId}`);
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
   };
 

@@ -40,7 +40,7 @@ async function fetchLabels(variables: LabelsVariables) {
   });
 
   const result = (await response.json()) as LabelsResponse;
-  return result.data.labels;
+  return result?.data?.labels;
 }
 
 const LabelsTitles = ({ projectId }: { projectId: string }) => {
@@ -64,7 +64,7 @@ const LabelsTitles = ({ projectId }: { projectId: string }) => {
   return (
     <div className="flex gap-3 flex-wrap mt-2 h-full">
       {userId &&
-        labels.map(label => (
+        labels?.map(label => (
           <Card key={label.id}>
             <p className="font-semibold p-2">{label.label}</p>
             <Image
