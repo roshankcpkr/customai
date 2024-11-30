@@ -71,7 +71,7 @@ async function fetchCreateImage(variables: CreateImageVariables) {
   }
 }`;
 
-  const response = await fetch(`${process.env.NEXT_PUBCLI_BACKEND_API}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

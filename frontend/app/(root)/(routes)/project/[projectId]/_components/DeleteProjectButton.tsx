@@ -33,7 +33,7 @@ async function fetchDeleteProject(variables: DeleteProjectVariables) {
     deleteProject(id: $id, owner: $owner)
   }`;
 
-  const response = await fetch(`${process.env.NEXT_PUBCLI_BACKEND_API}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

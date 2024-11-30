@@ -11,22 +11,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@clerk/nextjs";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-interface DeleteProjectResponse {
-  data: {
-    deleteProject: boolean;
-  };
-}
-
-interface DeleteProjectVariables {
-  id: string;
-  owner: string;
-}
 
 interface DeleteLabelResponse {
   data: {
@@ -47,7 +36,7 @@ async function fetchDeleteLabel(
     deleteLabel(imageId: $imageId, projectId: $projectId, ownerId: $ownerId)
   }`;
 
-  const response = await fetch(`${process.env.NEXT_PUBCLI_BACKEND_API}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

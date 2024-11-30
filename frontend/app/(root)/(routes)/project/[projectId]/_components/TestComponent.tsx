@@ -5,7 +5,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ImageUpload } from "./ImageUpload";
 import * as z from "zod";
@@ -39,7 +39,7 @@ async function fetchRunInference(variables: RunInferenceVariables) {
     }
   }`;
 
-  const response = await fetch(`${process.env.NEXT_PUBCLI_BACKEND_API}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

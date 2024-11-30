@@ -1,13 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { ProjectList } from "./_components/ProjectList";
 import { useAuth } from "@clerk/nextjs";
 
 export const dynamic = "force-dynamic";
 
 export default function ProjectPage() {
-  const { userId } = useAuth(); // Get user from Clerk context
+  const { userId } = useAuth();
 
   if (!userId) {
     return <p className="pt-40 pl-40 font-semibold">Loading...</p>;

@@ -28,7 +28,6 @@ import {
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Plus } from "lucide-react";
-import { toast, useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -68,7 +67,7 @@ async function fetchCreateProject(variables: CreateProjectVariables) {
   }
 }`;
 
-  const response = await fetch(`${process.env.NEXT_PUBCLI_BACKEND_API}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -104,8 +103,6 @@ const projectFormSchema = z.object({
 });
 
 export function CreateProjectCard() {
-  const [open, setOpen] = useState(false);
-
   const form = useForm<z.infer<typeof projectFormSchema>>({
     resolver: zodResolver(projectFormSchema),
     defaultValues: {
@@ -118,7 +115,6 @@ export function CreateProjectCard() {
   const isLoading = form.formState.isSubmitting;
 
   const user = useAuth().userId;
-  const { toast } = useToast();
   const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof projectFormSchema>) => {
@@ -132,7 +128,6 @@ export function CreateProjectCard() {
       });
       console.log(result);
       if (result === null) {
-        setOpen(false);
         form.reset();
         router.push("/");
       }
@@ -141,7 +136,7 @@ export function CreateProjectCard() {
 
   return (
     <Dialog>
-      <DialogTrigger asChild open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
         <Card className="flex flex-col items-center justify-center bg-inherit border-none shadow-none">
           <CardContent className="bg-white flex items-center justify-center h-40 max-w-3xl  hover:bg-gray-50   cursor-pointer transition-colors border-dashed border-2 border-gray-200">
             <div className="text-center">

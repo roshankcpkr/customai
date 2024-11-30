@@ -1,8 +1,6 @@
 import React from "react";
 
 import TabComponent from "./_components/TabComponent";
-import { Delete, Trash } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { DeleteProjectButton } from "./_components/DeleteProjectButton";
 
 interface ProjectIdPageProps {
@@ -40,7 +38,7 @@ async function fetchProject(variables: ProjectVariables) {
   }
 }`;
 
-  const response = await fetch(`${process.env.NEXT_PUBCLI_BACKEND_API}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

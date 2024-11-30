@@ -24,7 +24,7 @@ export default function TabComponent({
     <Card className="w-full max-w-3xl mx-auto">
       <CardContent className="p-6">
         <Tabs
-          defaultValue="welcome"
+          defaultValue={activeTab}
           className="w-full"
           onValueChange={setActiveTab}
         >

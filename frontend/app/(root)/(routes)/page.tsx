@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { ArrowRight, Upload, Zap, Code, Shield } from "lucide-react";
+import { ArrowRight, Upload, Zap, Code } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -134,7 +134,7 @@ export default function LandingPage() {
                   Once your labeled data is uploaded and processed, you can
                   start using the API almost immediately. The exact time may
                   vary depending on the size and complexity of your dataset, but
-                  typically it's ready within minutes to a few hours.
+                  typically it&apos;s ready within minutes to a few hours.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-4">

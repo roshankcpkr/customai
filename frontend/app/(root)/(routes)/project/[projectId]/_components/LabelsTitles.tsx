@@ -28,7 +28,7 @@ async function fetchLabels(variables: LabelsVariables) {
     }
   }`;
 
-  const response = await fetch(`${process.env.NEXT_PUBCLI_BACKEND_API}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -74,11 +74,7 @@ const LabelsTitles = ({ projectId }: { projectId: string }) => {
               height={150}
             />
 
-            <DeleteLabelButton
-              projectId={projectId}
-              imageId={label.id}
-              ownerId={userId}
-            />
+            <DeleteLabelButton projectId={projectId} imageId={label.id} />
           </Card>
         ))}
     </div>
