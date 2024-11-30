@@ -2,21 +2,18 @@
 
 import { useEffect, useState } from "react";
 import { CldUploadButton } from "next-cloudinary";
+import { ImageUp } from "lucide-react";
+import Image from "next/image";
 
 interface ImageUploadProps {
-  value: string[];
-  onChange: (imageUrl: string[]) => void;
-  disabled?: boolean;
+  value: string;
+  onChange: (imageUrl: string) => void;
 }
 
-export const ImageUpload = ({
-  value,
-  onChange,
-  disabled,
-}: ImageUploadProps) => {
+export const ImageUpload = ({ value, onChange }: ImageUploadProps) => {
   const [isMounted, setIsMounted] = useState(false);
   useEffect(() => {
-    if (value.length > 0) {
+    if (value) {
       console.log(`Uploading ${value}`);
     }
   }, [value]);
@@ -34,17 +31,22 @@ export const ImageUpload = ({
     >
       <CldUploadButton
         uploadPreset="customaiawdwadwad"
-        options={{ maxFiles: 20 }}
-        onSuccess={(result: any) => {
-          const newUrls = Array.isArray(result)
-            ? result.map((r: any) => r.info.secure_url)
-            : [result.info.secure_url];
-          console.log("newurls", newUrls);
-          onChange([...value, ...newUrls]);
-        }}
+        options={{ maxFiles: 1 }}
+        onSuccess={(result: any) => onChange(result.info.secure_url)}
       >
-        <div className="p-4 border-4 border-dashed border-primary/10 rounded-lg hover:opacity-75 transition flex flex-col space-y-2 items-center justify-center">
-          <div className="relative h-40 w-40"></div>
+        <div className="p-2 border-4 border-dashed border-primary/10 rounded-lg hover:opacity-75 transition flex flex-col space-y-2 items-center justify-center">
+          {value ? (
+            <div className="relative h-40 w-40">
+              <Image
+                fill
+                alt="Upload"
+                src={value || "/placeholder.png"}
+                className="rounded-lg object-cover"
+              />
+            </div>
+          ) : (
+            <ImageUp size={24} />
+          )}
         </div>
       </CldUploadButton>
     </div>

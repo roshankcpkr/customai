@@ -1,38 +1,83 @@
 import React from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { Sidebar } from "./_components/SideBar";
-import { LabelImages } from "./_components/LabelImages";
-import LabelImageForm from "./_components/LabelImageForm";
+
+import TabComponent from "./_components/TabComponent";
+import { Delete, Trash } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { DeleteProjectButton } from "./_components/DeleteProjectButton";
 
 interface ProjectIdPageProps {
   params: { projectId: string };
 }
 
-async function getProjectLabels(projectId: string) {
-  // This is a placeholder function. Replace with actual data fetching logic.
-  return [
-    { id: "1", name: "Label 1" },
-    { id: "2", name: "Label 2" },
-    { id: "3", name: "Label 3" },
-  ];
+interface ProjectResponse {
+  data: {
+    project: {
+      id: string;
+      name: string;
+      description: string;
+      isDeployed: boolean;
+      endpoint: string;
+      owner: string;
+      token: string;
+    };
+  };
+}
+
+interface ProjectVariables {
+  id: string;
+}
+
+async function fetchProject(variables: ProjectVariables) {
+  const query = `query Project($id: String!) {
+  project(id: $id) {
+    id
+    name
+    description
+    isDeployed
+    endpoint
+    owner
+    token
+  }
+}`;
+
+  const response = await fetch("http://localhost:8686/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query,
+      variables,
+    }),
+  });
+  const result = (await response.json()) as ProjectResponse;
+  return result.data.project;
 }
 
 const ProjectIdPage = async ({ params }: ProjectIdPageProps) => {
-  const labels = await getProjectLabels(params.projectId);
+  const { projectId } = params;
+  const projectData = await fetchProject({ id: projectId });
+
+  if (!projectData) {
+    return <div>Project not found</div>;
+  }
   return (
-    <div>
-      <h1>Project ID: {params.projectId}</h1>
-      <SidebarProvider>
-        <div className="flex h-screen">
-          <Sidebar projectId={params.projectId} initialLabels={labels} />
-          <main className="flex-1 p-6 overflow-auto">
-            <h1 className="text-2xl font-bold mb-6">
-              Project ID: {params.projectId}
-            </h1>
-            <LabelImageForm />
-          </main>
+    <div className="grid gap-4 pt-20 md:p-20 bg-gray-50">
+      <div className="p-4 rounded-lg">
+        <div className="flex flex-col justify-between items-center w-full">
+          <div className="max-w-3xl px-8 mb-2 flex justify-between items-center flex-wrap">
+            <DeleteProjectButton projectId={projectId} />
+            <h2 className="text-lg font-semibold mb-2 ml-8">
+              {projectData.name}
+            </h2>
+          </div>
+          <TabComponent
+            token={projectData.token}
+            endpoint={projectData.endpoint}
+            projectId={projectId}
+          />
         </div>
-      </SidebarProvider>
+      </div>
     </div>
   );
 };

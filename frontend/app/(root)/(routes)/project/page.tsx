@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { ProjectList } from "./_components/ProjectList";
 import { useAuth } from "@clerk/nextjs";
 
@@ -14,7 +15,7 @@ export default function ProjectPage() {
 
   return (
     <div className="bg-muted-foreground/10 h-screen p-10 pt-20">
-      <h2 className="text-2xl font-bold mb-6">Your Projects</h2>
+      <h2 className="text-2xl font-bold mb-6 ">Projects</h2>
       <ProjectList />
     </div>
   );

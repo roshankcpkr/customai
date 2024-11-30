@@ -28,8 +28,8 @@ export default function LandingPage() {
     <div className="flex flex-col min-h-screen">
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-24 xl:py-32">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center space-y-4 text-center">
+          <div className="px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none mb-4">
                   CustomAI
@@ -37,12 +37,12 @@ export default function LandingPage() {
                 <h2 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl/none">
                   Upload, Label, and Infer with Ease
                 </h2>
-                <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
+                <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400 mt-4 mb-8">
                   Create your own labeled dataset and get a pre-made API for
                   instant inferences. Streamline your AI workflow today.
                 </p>
               </div>
-              <div className="space-x-4">
+              <div>
                 <Button onClick={() => router.push("/sign-up")}>
                   Get Started
                 </Button>
@@ -50,8 +50,8 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800 ">
-          <div className="flex items-center flex-col px-4 md:px-6">
+        <section className="w-full flex flex-col items-center  py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800 ">
+          <div className="container flex items-center flex-col justify-center px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">
               Features
             </h2>
@@ -95,7 +95,7 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32">
+        <section className="w-full flex flex-col items-center py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl text-center mb-12">
               Frequently Asked Questions
@@ -149,7 +149,7 @@ export default function LandingPage() {
             </Accordion>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
+        <section className="w-full flex flex-col items-center py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
               <div className="space-y-2">

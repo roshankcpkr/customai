@@ -21,10 +21,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
         </CardHeader>
         <CardContent>
           {project.description && <p className="mb-2">{project.description}</p>}
-          <Badge variant={project.isDeployed ? "default" : "secondary"}>
-            {project.isDeployed ? "Deployed" : "Not Deployed"}
-          </Badge>
-          {project.isDeployed && project.endpoint && (
+          {project.endpoint && (
             <p className="mt-2 text-sm text-gray-500">
               Endpoint: {project.endpoint}
             </p>

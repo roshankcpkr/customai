@@ -11,7 +11,8 @@
   "dependencies": {
     "@hypermode/modus-sdk-as": "^0.14.2",
     "axios": "^1.7.8",
-    "json-as": "^0.9.26"
+    "json-as": "^0.9.26",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",

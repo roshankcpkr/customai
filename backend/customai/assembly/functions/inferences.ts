@@ -7,58 +7,37 @@ const connection: string = "dgraph";
 
 
 @json
-class QueryImageByEmbeddingResponse {
-
-  @alias("querySimilarImageByEmbedding")
-  label: string = "";
+class LabelData {
+  label: string;
 }
 
 
 @json
-class ValidateProjectTokenResponse {
-  validateProjectToken: boolean = false;
+class QueryImageByEmbeddingResponse {
+  querySimilarImageByEmbedding: LabelData[];
 }
 
 export function runInference(
   imageUrl: string,
   projectId: string,
-): QueryImageByEmbeddingResponse {
+  token: string,
+): LabelData[] {
   const embedding = embeddingGenerate(imageUrl);
   const data = embedding.embedding;
 
   const log = JSON.stringify(data);
   console.log(log);
-  //   const validateQuery = `
-  //   query validateProjectToken($projectId: ID!, $token: String!) {
-  //   validateProjectToken(projectId: $projectId, token: $token)
-  // }
-  //   `;
-
-  //   const validateVars = new graphql.Variables();
-  //   validateVars.set("projectId", projectId);
-  //   validateVars.set("token", token);
-
-  //   const validateResponse = graphql.execute<ValidateProjectTokenResponse>(
-  //     connection,
-  //     validateQuery,
-  //     validateVars,
-  //   );
-
-  //   const isValid = validateResponse.data!.validateProjectToken;
-  //   if (!isValid) {
-  //     throw new Error("Invalid token");
-  //   }
-
   const statement = `
-  query querySimilarImagesByEmbedding($embedding: [Float!]!, projectId: ID!) {
-      querySimilarImagesByEmbedding(embedding: $embedding, projectId: $projectId) {
+  query querySimilarImageByEmbedding($embeddings: [Float!]!, $projectId: String, $token: String) {
+      querySimilarImageByEmbedding(by: embedding, topK:1, vector: $embeddings, filter: {projectId: {eq: $projectId}, token: {eq: $token}}) {
         label
       }
   }
 `;
 
   const vars = new graphql.Variables();
-  vars.set("embedding", data);
+  vars.set("embeddings", data);
+  vars.set("token", token);
   vars.set("projectId", projectId);
 
   const response = graphql.execute<QueryImageByEmbeddingResponse>(
@@ -67,8 +46,9 @@ export function runInference(
     vars,
   );
 
-  const resdata = response.data!.label;
-  const result = new QueryImageByEmbeddingResponse();
-  result.label = resdata;
-  return result;
+  const resdata = response.data!.querySimilarImageByEmbedding;
+  const logdata = JSON.stringify(resdata);
+  console.log(logdata);
+
+  return resdata;
 }

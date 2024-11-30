@@ -1,5 +1,6 @@
 import { graphql } from "@hypermode/modus-sdk-as";
 import { Project } from "../classes/classes";
+import { JSON } from "json-as";
 
 const connection: string = "dgraph";
 
@@ -20,7 +21,11 @@ export function createProject(
   const statement = `
     mutation createProject($owner: String!, $name: String!, $endpoint: String, $isDeployed: Boolean!, $description: String!, $token: String) {
         addProject(input: {name: $name, endpoint: $endpoint, isDeployed: $isDeployed, description: $description, token: $token, owner: $owner}) {
-            numUids
+            numUids 
+            project {
+             id
+              name
+            }
         }
     }
 `;
@@ -39,25 +44,45 @@ export function createProject(
     statement,
     vars,
   );
+  const log = JSON.stringify(response.data!.createProject);
+  console.log(log);
 
   return response.data!.createProject;
 }
 
 
 @json
-class ProjectResponse {
-  queryProject: Project[] = [];
+class ProjectData {
+  id: string;
+  name: string;
+  description: string;
+  isDeployed: boolean;
+  endpoint: string;
+  owner: string;
+  token: string;
 }
 
-export function getProjects(userId: string): Project[] {
+
+@json
+class ProjectResponse {
+  queryProject: ProjectData[];
+}
+
+
+@json
+class GetSingleProjectResponse {
+  getProject: ProjectData | null;
+}
+
+export function getProjects(userId: string): ProjectData[] {
   const statement = `
-    query {
-        queryProject {
-            id
-            name
-            description
-            isDeployed
+    query queryProject($userId: String) {
+        queryProject(filter: {owner: {eq: $userId}}) {
+           description
             endpoint
+            id
+            isDeployed
+            name
             owner
             token
         }
@@ -65,6 +90,7 @@ export function getProjects(userId: string): Project[] {
 `;
 
   const vars = new graphql.Variables();
+  vars.set("userId", userId);
 
   const response = graphql.execute<ProjectResponse>(
     connection,
@@ -75,10 +101,10 @@ export function getProjects(userId: string): Project[] {
   return response.data!.queryProject;
 }
 
-export function getProject(id: string): Project | null {
+export function getProject(id: string): ProjectData | null {
   const statement = `
-    query getProject($id: string) {
-        queryProject(filter: {id: {eq: $id}}) {
+    query getProject($id: ID!) {
+        getProject(id: $id) {
             id
             name
             description
@@ -93,13 +119,13 @@ export function getProject(id: string): Project | null {
   const vars = new graphql.Variables();
   vars.set("id", id);
 
-  const response = graphql.execute<ProjectResponse>(
+  const response = graphql.execute<GetSingleProjectResponse>(
     connection,
     statement,
     vars,
   );
 
-  return response.data!.queryProject[0];
+  return response.data!.getProject;
 }
 
 export function updateProject(
@@ -140,13 +166,30 @@ export function updateProject(
 
 @json
 class DeleteProjectResponse {
-  deleteProject: Project | null = null;
+  deleteProject: Project | null;
 }
 
-export function deleteProject(id: string): boolean {
+export function deleteProject(id: string, owner: string): boolean {
+  const deleteImageStatement = `
+    mutation deleteImage($projectId: string) {
+        deleteImage(filter: {projectId: {eq: $projectId}}) {
+            numUids
+        }
+    }
+  `;
+
+  const deleteImageVars = new graphql.Variables();
+  deleteImageVars.set("projectId", id);
+
+  const deleteImageResponse = graphql.execute<DeleteProjectResponse>(
+    connection,
+    deleteImageStatement,
+    deleteImageVars,
+  );
+
   const statement = `
-    mutation deleteProject($id: string!) {
-        deleteProject(filter: {id: {eq: $id}}) {
+    mutation deleteProject($id: [ID!], $owner: String) {
+        deleteProject(filter: {id: $id, owner: {eq: $owner}}) {
             numUids
         }
     }
@@ -154,14 +197,15 @@ export function deleteProject(id: string): boolean {
 
   const vars = new graphql.Variables();
   vars.set("id", id);
+  vars.set("owner", owner);
 
   const response = graphql.execute<DeleteProjectResponse>(
     connection,
     statement,
     vars,
   );
-
-  return response.data!.deleteProject !== null;
+  const value = response.data!.deleteProject;
+  return value ? true : false;
 }
 
 export function deployProject(id: string): Project | null {

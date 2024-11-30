@@ -18,6 +18,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@clerk/nextjs";
+
 const formSchema = z.object({
   imageUrl: z.string().min(1, {
     message: "Image url must be a valid URL",
@@ -32,7 +36,63 @@ const formSchema = z.object({
     }),
 });
 
-const LabelImageForm = () => {
+interface CreateImageResponse {
+  data: {
+    createImage: {
+      id: string;
+      imageUrl: string;
+      label: string;
+      projectId: string;
+      token: string;
+      embedding: Array<number>;
+      owner: string;
+    };
+  };
+}
+
+interface CreateImageVariables {
+  imageUrl: string;
+  label: string;
+  projectId: string;
+  token: string;
+  owner: string;
+}
+
+async function fetchCreateImage(variables: CreateImageVariables) {
+  const query = `mutation CreateImage($imageUrl: String!, $label: String!, $projectId: String!, $token: String!, $owner: String!) {
+  createImage(imageUrl: $imageUrl, label: $label, projectId: $projectId, token: $token, owner: $owner) {
+    id
+    imageUrl
+    label
+    projectId
+    token
+    embedding
+    owner
+  }
+}`;
+
+  const response = await fetch("http://localhost:8686/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query,
+      variables,
+    }),
+  });
+
+  const result = (await response.json()) as CreateImageResponse;
+  return result.data.createImage;
+}
+
+const LabelImageForm = ({
+  projectId,
+  token,
+}: {
+  projectId: string;
+  token: string;
+}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,10 +101,38 @@ const LabelImageForm = () => {
     },
   });
   const isLoading = form.formState.isSubmitting;
+  const router = useRouter();
+  const toast = useToast();
+  const { userId } = useAuth();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
+    if (!userId) {
+      return;
+    }
+    try {
+      const fetchData = async () => {
+        const result = await fetchCreateImage({
+          imageUrl: values.imageUrl,
+          label: values.label.toLowerCase(),
+          projectId: projectId,
+          token: token,
+          owner: userId,
+        });
+        console.log("result", result);
+      };
+      fetchData();
+      form.reset();
+      toast.toast({
+        title: "Image uploaded",
+        description: "Image has been uploaded successfully",
+      });
+      router.push(`/project/${projectId}`);
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
+
   return (
     <div>
       <Form {...form}>
@@ -57,11 +145,7 @@ const LabelImageForm = () => {
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <ImageUpload
-                    disabled={isLoading}
-                    onChange={field.onChange}
-                    value={field.value}
-                  />
+                  <ImageUpload onChange={field.onChange} value={field.value} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

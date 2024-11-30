@@ -1,4 +1,8 @@
 {
   "extends": "assemblyscript/std/assembly.json",
-  "include": ["./**/*.ts"]
+  "include": ["./**/*.ts"],
+  "compilerOptions": {
+    "noImplicitAny": false,  // Disable implicit 'any' checks
+    "strict": false           // Disable strict type checking
+  }
 }

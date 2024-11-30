@@ -58,10 +58,26 @@ export class Image {
   id!: string;
 
 
-  @alias("Image.url")
+  @alias("Image.imageUrl")
   imageUrl: string = "";
 
 
   @alias("Image.label")
   label: string = "";
+
+
+  @alias("Image.projectId")
+  projectId: string = "";
+
+
+  @alias("Image.token")
+  token: string = "";
+
+
+  @alias("Image.embedding")
+  embedding: number[] = [];
+
+
+  @alias("Image.owner")
+  owner: string = "";
 }
