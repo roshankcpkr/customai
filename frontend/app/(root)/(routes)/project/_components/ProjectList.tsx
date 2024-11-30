@@ -76,7 +76,7 @@ export function ProjectList() {
   }, [userId]);
 
   return (
-    <div className="bg-white h-full p-8 rounded-lg">
+    <div className="bg-white dark:bg-black h-full p-8 rounded-lg">
       {projects.length === 0 ? (
         <div className="text-center">
           <p className="text-xl mb-4">No projects yet</p>
