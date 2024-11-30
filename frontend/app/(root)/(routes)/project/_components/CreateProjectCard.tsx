@@ -118,7 +118,20 @@ export function CreateProjectCard() {
   const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof projectFormSchema>) => {
-    const token = Math.random().toString(36).substring(36);
+    function generateRandomString(length: number) {
+      let result = "";
+      const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      const charactersLength = characters.length;
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
+    }
+    const token = await generateRandomString(20);
+    console.log("token", token);
     if (user) {
       const result = await fetchCreateProject({
         ...values,
